@@ -74,7 +74,6 @@
     <p>Gracias por tu apoyo.</p>
   </header>
 
-  <!-- Panel de inicio -->
   <div class="panel" id="panel">
     <h2>Selecciona el territorio asignado</h2>
     <select id="imageSelector">
@@ -84,11 +83,9 @@
     <button onclick="goToImage()">Ver Territorio</button>
   </div>
 
-  <!-- Carrusel -->
   <div class="carousel" id="carousel">
     <div class="slides" id="slides">
-      <!-- Las 45 imágenes se generan dinámicamente -->
-    </div>
+      </div>
     <button class="back-button" onclick="goToPanel()">Volver al panel</button>
   </div>
 
@@ -98,7 +95,7 @@
     const slidesContainer = document.getElementById('slides');
     const imageSelector = document.getElementById('imageSelector');
     let currentIndex = 0;
-    const totalImages = 45;
+    const totalImages = 50; 
     const slides = [];
 
     // Crear opciones en el selector y las imágenes
@@ -109,16 +106,21 @@
       imageSelector.appendChild(option);
 
       const img = document.createElement('img');
-      img.src = `imagen${i}.png`;
+      // CAMBIO AQUÍ: Ahora busca Diapositiva1.PNG hasta Diapositiva50.PNG
+      img.src = `Diapositiva${i}.PNG`; 
       img.alt = `Territorio ${i}`;
       slidesContainer.appendChild(img);
       slides.push(img);
     }
 
     function showSlide(index) {
-      slides[currentIndex].classList.remove('active');
+      if (slides[currentIndex]) {
+        slides[currentIndex].classList.remove('active');
+      }
       currentIndex = index;
-      slides[currentIndex].classList.add('active');
+      if (slides[currentIndex]) {
+        slides[currentIndex].classList.add('active');
+      }
     }
 
     function goToImage() {
