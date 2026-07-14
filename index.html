@@ -61,6 +61,23 @@
     .slides img.active {
       display: block;
     }
+    .form-container {
+      margin-top: 25px;
+      margin-bottom: 25px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    iframe {
+      width: 100%;
+      height: 380px;
+      max-width: 640px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background-color: white;
+    }
     .back-button {
       margin-top: 20px;
     }
@@ -74,6 +91,7 @@
     <p>Gracias por tu apoyo.</p>
   </header>
 
+  <!-- Panel de inicio -->
   <div class="panel" id="panel">
     <h2>Selecciona el territorio asignado</h2>
     <select id="imageSelector">
@@ -83,9 +101,18 @@
     <button onclick="goToImage()">Ver Territorio</button>
   </div>
 
+  <!-- Carrusel -->
   <div class="carousel" id="carousel">
     <div class="slides" id="slides">
-      </div>
+      <!-- Las imágenes se generan dinámicamente -->
+    </div>
+    
+    <!-- Formulario integrado que cambia dinámicamente con tu enlace -->
+    <div class="form-container">
+      <h3 style="color: #333; margin-bottom: 10px;">Reportar avance de este territorio</h3>
+      <iframe id="formIframe" src="" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>
+    </div>
+
     <button class="back-button" onclick="goToPanel()">Volver al panel</button>
   </div>
 
@@ -94,11 +121,14 @@
     const carousel = document.getElementById('carousel');
     const slidesContainer = document.getElementById('slides');
     const imageSelector = document.getElementById('imageSelector');
+    const formIframe = document.getElementById('formIframe');
     let currentIndex = 0;
     
-    // CONFIGURADO AQUÍ: Límite de 49 diapositivas
     const totalImages = 49; 
     const slides = [];
+
+    // TU ENLACE INTELIGENTE CONFIGURADO
+    const baseFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLScs4ExfUumVoGrIB49wggbM8FtsymVnX9CkjzXh7V121zQJUg/viewform?usp=pp_url&entry.2047924805=NUMERO"; 
 
     // Crear opciones en el selector y las imágenes
     for (let i = 1; i <= totalImages; i++) {
@@ -108,11 +138,25 @@
       imageSelector.appendChild(option);
 
       const img = document.createElement('img');
-      // Busca desde Diapositiva1.PNG hasta Diapositiva49.PNG
       img.src = `Diapositiva${i}.PNG`; 
       img.alt = `Territorio ${i}`;
+      
+      img.onerror = function() {
+        if (!this.getAttribute('data-tried-lowercase')) {
+          this.setAttribute('data-tried-lowercase', 'true');
+          const currentI = this.alt.replace('Territorio ', '');
+          this.src = `Diapositiva${currentI}.png`;
+        }
+      };
+
       slidesContainer.appendChild(img);
       slides.push(img);
+    }
+
+    function updateForm(territoryNumber) {
+      // Reemplaza de forma dinámica la palabra NUMERO por "Territorio X"
+      const personalizedUrl = baseFormUrl.replace("NUMERO", encodeURIComponent(`Territorio ${territoryNumber}`));
+      formIframe.src = personalizedUrl;
     }
 
     function showSlide(index) {
@@ -122,6 +166,8 @@
       currentIndex = index;
       if (slides[currentIndex]) {
         slides[currentIndex].classList.add('active');
+        // Actualiza el formulario con el número correcto de territorio
+        updateForm(currentIndex + 1);
       }
     }
 
@@ -143,7 +189,6 @@
       imageSelector.selectedIndex = 0;
     }
 
-    // Mostrar panel al inicio
     goToPanel();
   </script>
 </body>
