@@ -95,6 +95,8 @@
     const slidesContainer = document.getElementById('slides');
     const imageSelector = document.getElementById('imageSelector');
     let currentIndex = 0;
+    
+    // CONFIGURADO AQUÍ: Límite de 49 diapositivas
     const totalImages = 49; 
     const slides = [];
 
@@ -106,7 +108,7 @@
       imageSelector.appendChild(option);
 
       const img = document.createElement('img');
-      // CAMBIO AQUÍ: Ahora busca Diapositiva1.PNG hasta Diapositiva50.PNG
+      // Busca desde Diapositiva1.PNG hasta Diapositiva49.PNG
       img.src = `Diapositiva${i}.PNG`; 
       img.alt = `Territorio ${i}`;
       slidesContainer.appendChild(img);
