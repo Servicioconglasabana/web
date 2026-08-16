@@ -138,14 +138,22 @@
       imageSelector.appendChild(option);
 
       const img = document.createElement('img');
+      // Busca la extensión .PNG por defecto
       img.src = `Diapositiva${i}.PNG`; 
       img.alt = `Territorio ${i}`;
       
+      // Manejo inteligente de errores en caso de fallo de extensión o mayúsculas/minúsculas
       img.onerror = function() {
-        if (!this.getAttribute('data-tried-lowercase')) {
-          this.setAttribute('data-tried-lowercase', 'true');
-          const currentI = this.alt.replace('Territorio ', '');
-          this.src = `Diapositiva${currentI}.png`;
+        const currentI = this.alt.replace('Territorio ', '');
+        if (!this.getAttribute('data-tried-step1')) {
+          this.setAttribute('data-tried-step1', 'true');
+          this.src = `Diapositiva${currentI}.png`; // Intenta en minúsculas .png
+        } else if (!this.getAttribute('data-tried-step2')) {
+          this.setAttribute('data-tried-step2', 'true');
+          this.src = `Diapositiva${currentI}.JPG`; // Intenta .JPG
+        } else if (!this.getAttribute('data-tried-step3')) {
+          this.setAttribute('data-tried-step3', 'true');
+          this.src = `Diapositiva${currentI}.jpg`; // Intenta .jpg
         }
       };
 
